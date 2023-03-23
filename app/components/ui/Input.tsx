@@ -1,25 +1,62 @@
 import { TextInput, StyleSheet } from "react-native";
-import React from "react";
+import React, { FC } from "react";
 import { COLORS } from "../../constants/colors";
+import { SIZES } from "../../constants/sizes";
 
-export default function Input({ text }) {
-  return <TextInput style={styles.input} placeholder={text}></TextInput>;
+interface InputProps {
+  children: string;
+  style?: any;
+  size: SIZES;
+  long?: boolean;
+  color?: COLORS;
+  textColor?: COLORS;
+  onChange: (val: string) => void;
+  val: string;
+  isSecure?: boolean;
 }
+
+const Input: FC<InputProps> = ({
+  children,
+  onChange,
+  val,
+  style,
+  size,
+  long = false,
+  color = COLORS.complementary_light_theme,
+  textColor = COLORS.complementary_dark_theme,
+  isSecure = false,
+}) => {
+  return (
+    <TextInput
+      style={[
+        style,
+        {
+          width: size,
+          backgroundColor: color,
+          height: long ? 144 : 48,
+          color: textColor,
+        },
+        styles.input,
+      ]}
+      secureTextEntry={isSecure}
+      onChangeText={onChange}
+      value={val || ""}
+      placeholder={children}
+    ></TextInput>
+  );
+};
+
 const styles = StyleSheet.create({
   input: {
-    alignItems: "center",
-    justifyContent: "center",
-    width: "80%",
-    height: 48,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: COLORS.complementary_light_theme,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    color: COLORS.complementary_dark_theme,
-    marginBottom: "0.8em",
-    paddingLeft: "0.8em",
   },
 });
+
+export default Input;

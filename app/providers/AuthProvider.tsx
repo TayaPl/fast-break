@@ -7,28 +7,34 @@ import { auth, db, login, logout, register } from "../config/firebase";
 interface iContext {
   user: User | null;
   isLoading: boolean;
-  register: (email: string, password: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  registerI: (name: string, email: string, password: string) => Promise<void>;
+  loginI: (email: string, password: string) => Promise<void>;
+  logoutI: () => Promise<void>;
 }
 
 export const AuthContext = createContext<iContext>({} as iContext);
 
-export const AuthProvider: FC = ({ children }) => {
+export const AuthProvider: FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const registerHandler = async (email: string, password: string) => {
+  const registerHandler = async (
+    name: string,
+    email: string,
+    password: string
+  ) => {
     setIsLoading(true);
     try {
       const { user } = await register(email, password);
-      // await addDoc(collection(db, 'users'),{
-      //     _id: user.uid,
-      //     displayName: 'Аноним'
-      // })
+      await addDoc(collection(db, "users"), {
+        _id: user.uid,
+        displayName: name,
+      });
     } catch (error: any) {
-      Alert.alert("Error reg: ", error);
+      Alert.alert("Ошибшка регистрации: " + error);
     } finally {
       setIsLoading(false);
     }
@@ -39,7 +45,7 @@ export const AuthProvider: FC = ({ children }) => {
     try {
       await login(email, password);
     } catch (error: any) {
-      Alert.alert("Error login: ", error);
+      Alert.alert("Ошибшка входа: " + error);
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +75,9 @@ export const AuthProvider: FC = ({ children }) => {
     () => ({
       user,
       isLoading,
-      login: loginHandler,
-      logout: logoutHandler,
-      register: registerHandler,
+      loginI: loginHandler,
+      logoutI: logoutHandler,
+      registerI: registerHandler,
     }),
     [user, isLoading]
   );

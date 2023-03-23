@@ -1,10 +1,10 @@
-import { Text, SafeAreaView } from "react-native";
-import React from "react";
+import { View, StyleSheet } from "react-native";
+import React, { FC } from "react";
 
-export default function Home() {
-  return (
-    <SafeAreaView>
-      <Text>Home</Text>
-    </SafeAreaView>
-  );
-}
+interface HomeProps {}
+
+const Home: FC<HomeProps> = () => {
+  return <View>Home</View>;
+};
+
+export default Home;

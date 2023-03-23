@@ -1,12 +1,20 @@
-import { StyleSheet, View, Text, Pressable } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, View, Pressable } from "react-native";
+import React, { useState, FC } from "react";
 import { COLORS } from "../../constants/colors";
+import MyText from "./MyText";
+import { TEXT } from "../../constants/text";
+import { SIZES } from "../../constants/sizes";
 
-export default function CheckBox() {
+interface CheckBoxProps {
+  children: string;
+  style?: any;
+}
+
+const CheckBox: FC<CheckBoxProps> = ({ children, style }) => {
   const [isSelected, setSelection] = useState(false);
 
   return (
-    <View style={styles.checkboxContainer}>
+    <View style={[style, styles.checkboxContainer]}>
       <Pressable
         onPress={() => {
           setSelection(!isSelected);
@@ -18,18 +26,22 @@ export default function CheckBox() {
             : { backgroundColor: "" },
         ]}
       />
-      <Text style={styles.label}>
-        Согласен(на) на обработку персональных данных
-      </Text>
+      <MyText
+        style={styles.checkbox_label}
+        size={TEXT.text_small[0]}
+        weight={TEXT.text_small[1]}
+        color={COLORS.complementary_dark_theme}
+      >
+        {children}
+      </MyText>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
-    marginBottom: 20,
-    width: "80%",
+    width: SIZES.large,
     alignItems: "center",
   },
   checkbox: {
@@ -39,8 +51,10 @@ const styles = StyleSheet.create({
     width: 28,
     borderRadius: 10,
   },
-  label: {
-    margin: 8,
+  checkbox_label: {
+    marginLeft: 8,
     color: COLORS.complementary_dark_theme,
   },
 });
+
+export default CheckBox;
