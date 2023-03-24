@@ -39,9 +39,7 @@ const MyRegistration: FC = ({}) => {
         >
           ФИО
         </Input>
-      ) : (
-        <></>
-      )}
+      ) : null}
       <>
         <Input
           val={data.email}

@@ -1,10 +1,10 @@
-import { StyleSheet } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import React, { FC } from "react";
 
 interface MapProps {}
 
 const Map: FC<MapProps> = () => {
-  return <></>;
+  return <Text>Map</Text>;
 };
 
 export default Map;

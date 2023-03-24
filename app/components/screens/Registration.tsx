@@ -6,7 +6,6 @@ import {
   StatusBar,
   Animated,
   Pressable,
-  Text,
 } from "react-native";
 import { COLORS } from "../../constants/colors";
 import MyRegistration from "../ui/MyRegistration";
@@ -14,6 +13,7 @@ import { useAuth } from "../../hooks/useAuth";
 import MyText, { TextTransform } from "../ui/MyText";
 import { TEXT } from "../../constants/text";
 import Loader from "../ui/Loader";
+import Layout, { Views } from "../ui/Layout";
 
 const Registration = () => {
   const imgAnim = useRef<any>(new Animated.Value(0)).current;
@@ -48,12 +48,12 @@ const Registration = () => {
     <>
       <StatusBar barStyle="dark-content" />
       <Pressable
-        style={styles.area}
+        style={styles.pressableArea}
         onPress={() => {
           anim();
         }}
       >
-        <SafeAreaView style={styles.container}>
+        <Layout view={Views.safeAreaView}>
           <Animated.Image
             source={require("../../../assets/fast_break_еда.png")}
             style={[
@@ -63,7 +63,7 @@ const Registration = () => {
               styles.img,
             ]}
           />
-          <View style={styles.container}>
+          <Layout>
             <MyText style={styles.title}>
               <MyText
                 size={TEXT.header1[0]}
@@ -93,7 +93,7 @@ const Registration = () => {
             >
               Место для Тебя
             </MyText>
-          </View>
+          </Layout>
 
           <Animated.View
             style={[
@@ -105,25 +105,16 @@ const Registration = () => {
           >
             {isLoading ? <Loader /> : <MyRegistration />}
           </Animated.View>
-        </SafeAreaView>
+        </Layout>
       </Pressable>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  area: {
+  pressableArea: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
     backgroundColor: COLORS.complementary_light_theme,
-  },
-  container: {
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    margin: "auto",
-    position: "absolute",
   },
   img: {
     width: "110%",
@@ -148,7 +139,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     opacity: 0.9,
-    paddingTop: 55,
+    paddingTop: 60,
   },
 });
 
