@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import React, { FC } from "react";
 import { COLORS } from "../../constants/colors";
 import MyText, { TextAlign } from "./MyText";
-import { Weight } from "../../constants/text";
+import { TEXT, Weight } from "../../constants/text";
 import { SIZES } from "../../constants/sizes";
 
 const TextColor = {
@@ -16,43 +16,50 @@ const TextColor = {
 interface ButtonProps {
   children: string;
   style?: any;
-  size: SIZES;
+  size?: SIZES;
   color?: COLORS;
-  textSize: number | Weight;
-  textWeight: number | Weight;
+  textSize?: number | Weight;
+  textWeight?: number | Weight;
   border?: boolean;
   clear?: boolean;
   translucentText?: 1 | 0.5;
-  translucentButton?: 1 | 0.5;
+  translucentButton?: boolean;
   textColor?: COLORS;
+  disabled?: boolean;
   onPress?: () => void;
 }
 
 const Button: FC<ButtonProps> = ({
   children,
   style,
-  size,
+  size = SIZES.medium,
   color = "",
-  textSize,
-  textWeight,
+  textSize = TEXT.text[0],
+  textWeight = TEXT.text[0],
   border = false,
   clear = false,
   translucentText = 1,
-  translucentButton = 1,
+  translucentButton = false,
   textColor = TextColor[color],
   onPress = () => {},
+  disabled = false,
 }) => {
   return (
-    <Pressable
+    <TouchableOpacity
+      disabled={disabled}
       style={[
         style,
         {
           width: size,
-          backgroundColor: clear ? "" : color,
+          height: clear ? Number(textSize) + 10 : 48,
+          backgroundColor: clear
+            ? ""
+            : translucentButton
+            ? color + "80"
+            : color,
           borderColor: color,
           borderWidth: border ? 2 : 0,
           borderStyle: "solid",
-          opacity: translucentButton,
         },
         styles.button,
       ]}
@@ -62,14 +69,14 @@ const Button: FC<ButtonProps> = ({
         <MyText
           size={textSize}
           weight={textWeight}
-          color={clear ? COLORS.complementary_dark_theme : textColor}
-          translucent={translucentButton ? 1 : translucentText}
+          color={textColor}
+          translucent={translucentText}
           textAlign={TextAlign.center}
         >
           {children}
         </MyText>
       }
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 
@@ -81,7 +88,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    height: 48,
   },
 });
 

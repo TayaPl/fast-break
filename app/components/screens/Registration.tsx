@@ -1,12 +1,5 @@
 import React, { useRef } from "react";
-import {
-  View,
-  SafeAreaView,
-  StyleSheet,
-  StatusBar,
-  Animated,
-  Pressable,
-} from "react-native";
+import { StyleSheet, StatusBar, Animated, Pressable } from "react-native";
 import { COLORS } from "../../constants/colors";
 import MyRegistration from "../ui/MyRegistration";
 import { useAuth } from "../../hooks/useAuth";
@@ -135,10 +128,9 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: "77%",
     width: "100%",
-    backgroundColor: COLORS.main_light_theme,
+    backgroundColor: COLORS.main_light_theme + "E6",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    opacity: 0.9,
     paddingTop: 60,
   },
 });

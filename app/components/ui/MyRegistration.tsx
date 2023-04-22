@@ -6,6 +6,7 @@ import { SIZES } from "../../constants/sizes";
 import { TEXT } from "../../constants/text";
 import Button from "./Button";
 import { useAuth } from "../../hooks/useAuth";
+import CheckBox from "./CheckBox";
 
 interface iData {
   name?: string;
@@ -18,6 +19,7 @@ const MyRegistration: FC = ({}) => {
 
   const [isReg, setIsReg] = useState(false);
   const [data, setData] = useState<iData>({} as iData);
+  const [isSelected, setSelection] = useState(false);
 
   const authHandler = async () => {
     const { name, email, password } = data;
@@ -28,6 +30,14 @@ const MyRegistration: FC = ({}) => {
     setData({} as iData);
   };
 
+  const isFilled =
+    (isReg ? isSelected : true) &&
+    data?.email != undefined &&
+    data?.email != "" &&
+    data?.password != undefined &&
+    data?.password != "" &&
+    (isReg ? data?.name != undefined && data?.name != "" : true);
+
   return (
     <>
       {isReg ? (
@@ -36,44 +46,57 @@ const MyRegistration: FC = ({}) => {
           onChange={(val) => setData({ ...data, name: val })}
           style={styles.input}
           size={SIZES.large}
-        >
-          ФИО
-        </Input>
-      ) : null}
+          placeholder={"Фио"}
+          fill={true}
+        />
+      ) : (
+        <></>
+      )}
       <>
         <Input
           val={data.email}
           onChange={(val) => setData({ ...data, email: val })}
           style={styles.input}
           size={SIZES.large}
-        >
-          Еmail
-        </Input>
+          placeholder={"Email"}
+          fill={true}
+        />
         <Input
           val={data.password}
           onChange={(val) => setData({ ...data, password: val })}
           style={styles.input}
           size={SIZES.large}
           isSecure={true}
-        >
-          Пароль
-        </Input>
+          placeholder={"Пароль"}
+          fill={true}
+        />
+        {isReg ? (
+          <CheckBox isSelected={isSelected} setSelection={setSelection}>
+            Согласен(на) на обработку персональных данных
+          </CheckBox>
+        ) : (
+          <></>
+        )}
         <Button
           style={styles.button}
-          color={COLORS.accent_theme}
+          color={
+            isFilled ? COLORS.accent_theme : COLORS.complementary_dark_theme
+          }
           size={SIZES.medium}
+          disabled={!isFilled}
           textSize={TEXT.text[0]}
           textWeight={TEXT.text[1]}
-          onPress={authHandler}
+          onPress={isFilled ? authHandler : null}
         >
           {isReg ? "Зарегистрироваться" : "Войти"}
         </Button>
         <Button
           clear={true}
+          textColor={COLORS.complementary_dark_theme}
           size={SIZES.medium}
           textSize={TEXT.text[0]}
           textWeight={TEXT.text[1]}
-          translucentButton={0.5}
+          translucentButton={true}
           onPress={() => {
             setIsReg(!isReg);
           }}

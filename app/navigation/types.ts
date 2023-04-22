@@ -4,4 +4,5 @@ export type TypeRootStackParsmList = {
   Map: undefined;
   Restaurant: undefined;
   Advice: undefined;
+  Profile: undefined;
 };

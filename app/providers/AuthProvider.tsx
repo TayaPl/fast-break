@@ -1,8 +1,9 @@
-import { onAuthStateChanged, User } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { deleteUser, onAuthStateChanged, User } from "firebase/auth";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import React, { createContext, FC, useEffect, useMemo, useState } from "react";
 import { Alert } from "react-native";
 import { auth, db, login, logout, register } from "../config/firebase";
+import { doc, deleteDoc } from "firebase/firestore";
 
 interface iContext {
   user: User | null;
@@ -10,6 +11,7 @@ interface iContext {
   registerI: (name: string, email: string, password: string) => Promise<void>;
   loginI: (email: string, password: string) => Promise<void>;
   logoutI: () => Promise<void>;
+  deliteI: () => Promise<void>;
 }
 
 export const AuthContext = createContext<iContext>({} as iContext);
@@ -34,7 +36,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({
         displayName: name,
       });
     } catch (error: any) {
-      Alert.alert("Ошибшка регистрации: " + error);
+      Alert.alert("Ошибшка регистрации: " + error.code);
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +47,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({
     try {
       await login(email, password);
     } catch (error: any) {
-      Alert.alert("Ошибшка входа: " + error);
+      Alert.alert("Ошибшка входа: " + error.code);
     } finally {
       setIsLoading(false);
     }
@@ -56,7 +58,25 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({
     try {
       await logout();
     } catch (error: any) {
-      Alert.alert("Error logout: ", error);
+      Alert.alert("Error logout: ", error.code);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const deliteHandler = async () => {
+    setIsLoading(true);
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "users"), where("_id", "==", user?.uid))
+      );
+      deleteUser(user).then(() => {
+        querySnapshot.forEach((d) => {
+          deleteDoc(doc(db, "users", d.id));
+        });
+      });
+    } catch (error: any) {
+      Alert.alert("Error logout: ", error.code);
     } finally {
       setIsLoading(false);
     }
@@ -78,6 +98,7 @@ export const AuthProvider: FC<{ children: React.ReactNode }> = ({
       loginI: loginHandler,
       logoutI: logoutHandler,
       registerI: registerHandler,
+      deliteI: deliteHandler,
     }),
     [user, isLoading]
   );

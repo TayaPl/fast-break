@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import React, { FC } from "react";
 
 export enum Views {
@@ -8,7 +8,7 @@ export enum Views {
 }
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   view?: Views;
   style?: any;
 }
@@ -21,23 +21,18 @@ const Layout: FC<LayoutProps> = ({
   return (
     <>
       {view == Views.scrollView ? (
-        <ScrollView style={[style, styles.container]}>{children}</ScrollView>
+        <ScrollView style={[style, { flex: 1 }]}>{children}</ScrollView>
       ) : view == Views.safeAreaView ? (
-        <SafeAreaView style={[style, styles.container]}>
+        <SafeAreaView style={[style, { flex: 1, alignItems: "center" }]}>
           {children}
         </SafeAreaView>
       ) : (
-        <View style={[style, styles.container]}>{children}</View>
+        <View style={[style, { flex: 1, alignItems: "center" }]}>
+          {children}
+        </View>
       )}
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-  },
-});
 
 export default Layout;

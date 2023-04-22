@@ -8,11 +8,16 @@ import { SIZES } from "../../constants/sizes";
 interface CheckBoxProps {
   children: string;
   style?: any;
+  isSelected: boolean;
+  setSelection: any;
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ children, style }) => {
-  const [isSelected, setSelection] = useState(false);
-
+const CheckBox: FC<CheckBoxProps> = ({
+  children,
+  style,
+  isSelected,
+  setSelection,
+}) => {
   return (
     <View style={[style, styles.checkboxContainer]}>
       <Pressable
@@ -22,8 +27,14 @@ const CheckBox: FC<CheckBoxProps> = ({ children, style }) => {
         style={[
           styles.checkbox,
           isSelected
-            ? { backgroundColor: COLORS.accent_theme }
-            : { backgroundColor: "" },
+            ? {
+                backgroundColor: COLORS.accent_theme,
+                borderColor: COLORS.accent_theme,
+              }
+            : {
+                backgroundColor: "rgba(0, 0, 0, 0)",
+                borderColor: COLORS.complementary_light_theme,
+              },
         ]}
       />
       <MyText
@@ -45,7 +56,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   checkbox: {
-    borderColor: COLORS.complementary_light_theme,
     borderWidth: 2,
     height: 28,
     width: 28,

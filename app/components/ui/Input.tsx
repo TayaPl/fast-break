@@ -4,23 +4,26 @@ import { COLORS } from "../../constants/colors";
 import { SIZES } from "../../constants/sizes";
 
 interface InputProps {
-  children: string;
+  placeholder: string;
   style?: any;
-  size: SIZES;
+  size: SIZES | string;
   long?: boolean;
-  color?: COLORS;
-  textColor?: COLORS;
+  color?: COLORS | string;
+  textColor?: COLORS | string;
   onChange: (val: string) => void;
   val: string;
   isSecure?: boolean;
+  fill?: boolean;
+  gradient?: boolean;
 }
 
 const Input: FC<InputProps> = ({
-  children,
+  placeholder,
   onChange,
   val,
   style,
   size,
+  fill = false,
   long = false,
   color = COLORS.complementary_light_theme,
   textColor = COLORS.complementary_dark_theme,
@@ -29,20 +32,21 @@ const Input: FC<InputProps> = ({
   return (
     <TextInput
       style={[
+        styles.input,
         style,
         {
           width: size,
-          backgroundColor: color,
+          backgroundColor: fill ? color : "rgba(0, 0, 0, 0)",
+          borderColor: color,
           height: long ? 144 : 48,
           color: textColor,
         },
-        styles.input,
       ]}
       secureTextEntry={isSecure}
       onChangeText={onChange}
       value={val || ""}
-      placeholder={children}
-    ></TextInput>
+      placeholder={placeholder}
+    />
   );
 };
 

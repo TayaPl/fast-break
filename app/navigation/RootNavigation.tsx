@@ -6,6 +6,7 @@ import Map from "../components/screens/Map";
 import { useAuth } from "../hooks/useAuth";
 import Restaurant from "../components/screens/Restaurant";
 import Advice from "../components/screens/Advice";
+import Profile from "../components/screens/Profile";
 
 const RootStack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ export default function RootNavigation() {
             <RootStack.Screen name="Map" component={Map} />
             <RootStack.Screen name="Restaurant" component={Restaurant} />
             <RootStack.Screen name="Advice" component={Advice} />
+            <RootStack.Screen name="Profile" component={Profile} />
           </>
         ) : (
           <RootStack.Screen name="Registration" component={Registration} />
